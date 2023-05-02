@@ -1,0 +1,15 @@
+import "common/Base"
+datasource db {
+    provider="sqlite"
+    url="file:./dev.db"
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model Post extends Base {
+    title String
+    content String?
+    viewCount Int @default(0)
+}
