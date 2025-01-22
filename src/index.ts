@@ -1,5 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-import { withPolicy } from '@zenstackhq/runtime';
+import { enhance } from '@zenstackhq/runtime';
 import express, { Request } from 'express';
 
 const prisma = new PrismaClient();
@@ -22,7 +22,7 @@ function getUserId(req: Request) {
 
 // Gets a Prisma client bound to the current user identity
 function getPrisma(req: Request) {
-    return withPolicy(prisma, {
+    return enhance(prisma, {
         user: { id: getUserId(req) },
     });
 }
@@ -155,10 +155,7 @@ app.get('/feed', async (req, res) => {
 
     const or: Prisma.PostWhereInput = searchString
         ? {
-              OR: [
-                  { title: { contains: searchString as string } },
-                  { content: { contains: searchString as string } },
-              ],
+              OR: [{ title: { contains: searchString as string } }, { content: { contains: searchString as string } }],
           }
         : {};
 
